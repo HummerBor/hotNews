@@ -1,0 +1,62 @@
+{
+  "name": "hot-search",
+  "displayName": "Hot Search",
+  "description": "百度热搜榜 - 个人自用",
+  "version": "0.2.5",
+  "publisher": "local",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [{
+        "id": "hotSearch",
+        "title": "百度热搜",
+        "icon": "media/icon.svg"
+      }]
+    },
+    "views": {
+      "hotSearch": [{
+        "type": "webview",
+        "id": "hotSearch.panel",
+        "name": "热搜"
+      }]
+    },
+    "commands": [
+      { "command": "hotSearch.refresh", "title": "Hot Search: Refresh", "icon": "$(refresh)" },
+      { "command": "hotSearch.openSidebar", "title": "Hot Search: Open Sidebar" }
+    ],
+    "configuration": {
+      "title": "Hot Search",
+      "properties": {
+        "hotSearch.openMode": {
+          "type": "string",
+          "enum": ["external", "simpleBrowser"],
+          "default": "external",
+          "description": "点击条目打开方式"
+        },
+        "hotSearch.carouselInterval": {
+          "type": "number",
+          "default": 5,
+          "minimum": 2,
+          "description": "状态栏轮播间隔（秒）"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "npm run compile && npx @vscode/vsce package --no-dependencies",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.0.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.4.0",
+    "vitest": "^3.0.0"
+  }
+}
