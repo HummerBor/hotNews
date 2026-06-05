@@ -4,6 +4,11 @@
   "description": "百度热搜榜 - 个人自用",
   "version": "0.2.5",
   "publisher": "local",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HummerBor/hotNews.git"
+  },
   "engines": { "vscode": "^1.85.0" },
   "categories": ["Other"],
   "activationEvents": ["onStartupFinished"],
