@@ -9,7 +9,7 @@ export class StatusBarManager implements vscode.Disposable {
 
   constructor() {
     this.item = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
-    this.item.command = 'hotSearch.openSidebar';
+    this.item.command = 'hotDuck.openSidebar';
     this.item.text = '$(flame) 热搜';
     this.item.show();
   }
@@ -35,7 +35,7 @@ export class StatusBarManager implements vscode.Disposable {
 
   private restartCarousel(): void {
     if (this.timer) clearInterval(this.timer);
-    const seconds = vscode.workspace.getConfiguration('hotSearch').get<number>('carouselInterval', 5);
+    const seconds = vscode.workspace.getConfiguration('hotDuck').get<number>('carouselInterval', 5);
     this.timer = setInterval(() => {
       if (this.carouselItems.length === 0) return;
       this.carouselIndex = (this.carouselIndex + 1) % this.carouselItems.length;

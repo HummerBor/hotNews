@@ -122,7 +122,7 @@ export class HotSearchViewProvider implements vscode.WebviewViewProvider {
   }
 
   private async openUrl(url: string): Promise<void> {
-    const mode = vscode.workspace.getConfiguration('hotSearch').get<string>('openMode', 'external');
+    const mode = vscode.workspace.getConfiguration('hotDuck').get<string>('openMode', 'external');
     if (mode === 'simpleBrowser') {
       await vscode.commands.executeCommand('simpleBrowser.show', url);
     } else {
@@ -131,6 +131,6 @@ export class HotSearchViewProvider implements vscode.WebviewViewProvider {
   }
 
   reveal(): void {
-    void vscode.commands.executeCommand('workbench.view.extension.hotSearch');
+    void vscode.commands.executeCommand('workbench.view.extension.hotDuck');
   }
 }

@@ -30,7 +30,7 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     service,
     statusBar,
-    vscode.window.registerWebviewViewProvider('hotSearch.panel', viewProvider),
+    vscode.window.registerWebviewViewProvider('hotDuck.panel', viewProvider),
     service.onBoardUpdated((board) => {
       viewProvider.onBoardUpdated(board);
       if (`${board.platform}:${board.id}` === statusSource) {
@@ -42,10 +42,10 @@ export function activate(context: vscode.ExtensionContext): void {
       viewProvider.onError(platform, boardId, err.message);
       void vscode.window.showWarningMessage(`热搜更新失败：${err.message}`);
     }),
-    vscode.commands.registerCommand('hotSearch.refresh', () => viewProvider.refreshCurrent()),
-    vscode.commands.registerCommand('hotSearch.openSidebar', () => viewProvider.reveal()),
+    vscode.commands.registerCommand('hotDuck.refresh', () => viewProvider.refreshCurrent()),
+    vscode.commands.registerCommand('hotDuck.openSidebar', () => viewProvider.reveal()),
     vscode.workspace.onDidChangeConfiguration((e) => {
-      if (e.affectsConfiguration('hotSearch.carouselInterval')) {
+      if (e.affectsConfiguration('hotDuck.carouselInterval')) {
         statusBar.onConfigChanged();
       }
     }),

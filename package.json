@@ -24,36 +24,36 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "hotSearch",
+          "id": "hotDuck",
           "title": "热搜",
           "icon": "media/icon.svg"
         }
       ]
     },
     "views": {
-      "hotSearch": [
+      "hotDuck": [
         {
           "type": "webview",
-          "id": "hotSearch.panel",
+          "id": "hotDuck.panel",
           "name": "热搜"
         }
       ]
     },
     "commands": [
       {
-        "command": "hotSearch.refresh",
+        "command": "hotDuck.refresh",
         "title": "Hot Search: Refresh",
         "icon": "$(refresh)"
       },
       {
-        "command": "hotSearch.openSidebar",
+        "command": "hotDuck.openSidebar",
         "title": "Hot Search: Open Sidebar"
       }
     ],
     "configuration": {
       "title": "Hot Search",
       "properties": {
-        "hotSearch.openMode": {
+        "hotDuck.openMode": {
           "type": "string",
           "enum": [
             "external",
@@ -62,7 +62,7 @@
           "default": "external",
           "description": "点击条目打开方式"
         },
-        "hotSearch.carouselInterval": {
+        "hotDuck.carouselInterval": {
           "type": "number",
           "default": 5,
           "minimum": 2,

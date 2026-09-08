@@ -13,7 +13,7 @@ Cursor / VS Code 侧边栏看 AI 热点（[AI HOT](https://aihot.virxact.com)）
 3. AI 条目悬停可看摘要、来源和发布时间；点条目打开链接，点 **换一换** 刷新
 4. 左下角状态栏轮播热搜（跟随侧边栏当前 tab，默认 AI 精选），点击跳转到侧边栏
 
-设置里搜 `hotSearch` 可改：打开方式（浏览器 / 内置）、轮播间隔。
+设置里搜 `hotDuck` 可改：打开方式（浏览器 / 内置）、轮播间隔。
 
 启动时会拉取一次 AI 精选供状态栏轮播；侧边栏在打开或手动刷新时拉取。不会后台定时轮询。AI 数据来自 [aihot.virxact.com](https://aihot.virxact.com/agent) 的公开 API（匿名、无需 token）。
 
