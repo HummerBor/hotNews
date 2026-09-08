@@ -1,8 +1,8 @@
 {
-  "name": "hot-search",
-  "displayName": "Hot Search",
+  "name": "hot-duck",
+  "displayName": "Hot Duck",
   "description": "AI HOT / 百度 / 微博 / 腾讯热搜榜 - 个人自用",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "publisher": "local",
   "icon": "media/pi-icon.png",
   "license": "SEE LICENSE IN LICENSE",
@@ -10,35 +10,55 @@
     "type": "git",
     "url": "https://github.com/HummerBor/hotNews.git"
   },
-  "engines": { "vscode": "^1.85.0" },
-  "categories": ["Other"],
-  "activationEvents": ["onStartupFinished"],
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "viewsContainers": {
-      "activitybar": [{
-        "id": "hotSearch",
-        "title": "热搜",
-        "icon": "media/icon.svg"
-      }]
+      "activitybar": [
+        {
+          "id": "hotSearch",
+          "title": "热搜",
+          "icon": "media/icon.svg"
+        }
+      ]
     },
     "views": {
-      "hotSearch": [{
-        "type": "webview",
-        "id": "hotSearch.panel",
-        "name": "热搜"
-      }]
+      "hotSearch": [
+        {
+          "type": "webview",
+          "id": "hotSearch.panel",
+          "name": "热搜"
+        }
+      ]
     },
     "commands": [
-      { "command": "hotSearch.refresh", "title": "Hot Search: Refresh", "icon": "$(refresh)" },
-      { "command": "hotSearch.openSidebar", "title": "Hot Search: Open Sidebar" }
+      {
+        "command": "hotSearch.refresh",
+        "title": "Hot Search: Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "hotSearch.openSidebar",
+        "title": "Hot Search: Open Sidebar"
+      }
     ],
     "configuration": {
       "title": "Hot Search",
       "properties": {
         "hotSearch.openMode": {
           "type": "string",
-          "enum": ["external", "simpleBrowser"],
+          "enum": [
+            "external",
+            "simpleBrowser"
+          ],
           "default": "external",
           "description": "点击条目打开方式"
         },

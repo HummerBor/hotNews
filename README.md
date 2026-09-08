@@ -1,6 +1,6 @@
-<p align="center"><img src="media/pi-icon.png" width="96" alt="Hot Search logo"/></p>
+<p align="center"><img src="media/pi-icon.png" width="96" alt="Hot Duck logo"/></p>
 
-# Hot Search
+# Hot Duck
 
 Cursor / VS Code 侧边栏看 AI 热点（[AI HOT](https://aihot.virxact.com)）和百度、微博、腾讯热搜，状态栏轮播当前榜单。
 
@@ -37,7 +37,7 @@ npm run watch    # 保持编译，另开终端跑着
 npm run package
 ```
 
-项目根目录会生成 `hot-search-x.x.x.vsix`。
+项目根目录会生成 `hot-duck-x.x.x.vsix`。
 
 ## 安装 .vsix
 
@@ -48,9 +48,9 @@ Extensions 面板 → 右上角 `...` → **Install from VSIX...** → 选 `.vsi
 **命令行安装（Cursor / VS Code 都行）**
 
 ```bash
-cursor --install-extension hot-search-0.2.5.vsix --force
+cursor --install-extension hot-duck-x.x.x.vsix --force
 # 或
-code --install-extension hot-search-0.2.5.vsix --force
+code --install-extension hot-duck-x.x.x.vsix --force
 ```
 
 装完 Reload Window。已有旧版时加 `--force` 覆盖。
