@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   // 状态栏跟随侧边栏当前 tab，默认 AI 精选
   let statusSource = 'aihot:selected';
-  const viewProvider = new HotSearchViewProvider(service, (platform, boardId) => {
+  const viewProvider = new HotSearchViewProvider(service, context.extensionUri, (platform, boardId) => {
     statusSource = `${platform}:${boardId}`;
     const cached = service.getCached(platform, boardId);
     if (cached) statusBar.updateFromBoard(cached);

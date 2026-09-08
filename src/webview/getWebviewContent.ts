@@ -1,13 +1,14 @@
 import * as vscode from 'vscode';
 
-export function getWebviewContent(webview: vscode.Webview): string {
+export function getWebviewContent(webview: vscode.Webview, logoUri?: vscode.Uri): string {
   const nonce = getNonce();
+  const logoSrc = logoUri ? webview.asWebviewUri(logoUri).toString() : '';
 
   return `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'nonce-${nonce}'; script-src 'nonce-${nonce}';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'nonce-${nonce}'; script-src 'nonce-${nonce}'; img-src ${webview.cspSource};">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style nonce="${nonce}">
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,7 +36,8 @@ export function getWebviewContent(webview: vscode.Webview): string {
       padding-bottom: 8px;
       border-bottom: 1px solid var(--vscode-panel-border);
     }
-    .header h1 { font-size: 14px; font-weight: 600; }
+    .header h1 { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+    .header .logo { width: 18px; height: 18px; border-radius: 4px; }
     .refresh-btn {
       background: transparent;
       border: none;
@@ -154,7 +156,7 @@ export function getWebviewContent(webview: vscode.Webview): string {
 <body>
   <div class="toolbar">
     <div class="header">
-      <h1 id="title">热搜</h1>
+      <h1 id="title">${logoSrc ? `<img class="logo" src="${logoSrc}" alt="" onerror="this.remove()">` : ''}<span>热搜</span></h1>
       <button class="refresh-btn" id="refreshBtn">换一换 ↻</button>
     </div>
     <div class="platform-tabs">

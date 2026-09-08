@@ -4,6 +4,7 @@
   "description": "AI HOT / 百度 / 微博 / 腾讯热搜榜 - 个人自用",
   "version": "0.3.1",
   "publisher": "local",
+  "icon": "media/pi-icon.png",
   "license": "SEE LICENSE IN LICENSE",
   "repository": {
     "type": "git",

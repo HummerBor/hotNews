@@ -1,3 +1,5 @@
+<p align="center"><img src="media/pi-icon.png" width="96" alt="Hot Search logo"/></p>
+
 # Hot Search
 
 Cursor / VS Code 侧边栏看 AI 热点（[AI HOT](https://aihot.virxact.com)）和百度、微博、腾讯热搜，状态栏轮播当前榜单。

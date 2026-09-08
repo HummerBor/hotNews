@@ -12,13 +12,20 @@ export class HotSearchViewProvider implements vscode.WebviewViewProvider {
 
   constructor(
     private service: TrendService,
+    private extensionUri: vscode.Uri,
     private onActiveBoardChanged?: ActiveBoardListener,
   ) {}
 
   resolveWebviewView(webviewView: vscode.WebviewView): void {
     this.view = webviewView;
-    webviewView.webview.options = { enableScripts: true };
-    webviewView.webview.html = getWebviewContent(webviewView.webview);
+    webviewView.webview.options = {
+      enableScripts: true,
+      localResourceRoots: [vscode.Uri.joinPath(this.extensionUri, 'media')],
+    };
+    webviewView.webview.html = getWebviewContent(
+      webviewView.webview,
+      vscode.Uri.joinPath(this.extensionUri, 'media', 'pi-icon.png'),
+    );
 
     webviewView.onDidChangeVisibility(() => {
       if (webviewView.visible) void this.fetchCurrent();
