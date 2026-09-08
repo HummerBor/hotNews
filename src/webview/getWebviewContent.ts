@@ -187,7 +187,8 @@ export function getWebviewContent(webview: vscode.Webview, logoUri?: vscode.Uri)
 
     function updateTitle() {
       const name = platformNames[activePlatform];
-      document.getElementById('title').textContent =
+      // 只更新文字 span，保留标题里的 logo <img>
+      document.querySelector('#title span').textContent =
         activePlatform === 'aihot' ? 'AI 热搜' : name + '热搜';
     }
 
