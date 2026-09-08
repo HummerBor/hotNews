@@ -2,3 +2,5 @@ node_modules/
 dist/
 *.vsix
 .vscode-test/
+代理脚本/vpn-gui/target/
+.cursor/

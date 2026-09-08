@@ -1,7 +1,6 @@
 export type TrendBadge = '新' | '热';
-export type PlatformId = 'baidu' | 'weibo' | 'tencent';
-export type BoardId = 'realtime' | 'finance';
-export type OpenMode = 'external' | 'simpleBrowser';
+export type PlatformId = 'aihot' | 'baidu' | 'weibo' | 'tencent';
+export type BoardId = 'realtime' | 'finance' | 'selected' | 'all';
 
 export interface TrendItem {
   rank: number;
@@ -9,6 +8,8 @@ export interface TrendItem {
   url: string;
   badge?: TrendBadge;
   isPinned?: boolean;
+  /** hover 提示，AI HOT 条目用来放 来源 · 时间 + 摘要 */
+  tooltip?: string;
 }
 
 export interface TrendBoard {
@@ -25,19 +26,9 @@ export interface TrendProvider {
   fetchBoard(boardId: BoardId): Promise<TrendBoard>;
 }
 
-export const PLATFORM_NAMES: Record<PlatformId, string> = {
-  baidu: '百度',
-  weibo: '微博',
-  tencent: '腾讯',
-};
-
 export const BOARD_NAMES: Record<BoardId, string> = {
   realtime: '热搜榜',
   finance: '财经榜',
+  selected: '精选',
+  all: 'AI 动态',
 };
-
-export function boardCacheKey(platform: PlatformId, boardId: BoardId): string {
-  return `${platform}:${boardId}`;
-}
-
-export const ALL_PLATFORMS: PlatformId[] = ['baidu', 'weibo', 'tencent'];

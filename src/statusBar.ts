@@ -15,7 +15,6 @@ export class StatusBarManager implements vscode.Disposable {
   }
 
   updateFromBoard(board: TrendBoard): void {
-    if (board.id !== 'realtime') return;
     this.carouselItems = board.items.filter((i) => !i.isPinned);
     if (this.carouselItems.length === 0) {
       this.item.text = '$(flame) 热搜';

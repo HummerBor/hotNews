@@ -1,22 +1,27 @@
 import * as vscode from 'vscode';
-import { BoardId, PlatformId, TrendBoard } from '../trend/types';
+import { BOARD_NAMES, BoardId, PlatformId, TrendBoard } from '../trend/types';
 import { TrendService } from '../trend/service';
 import { getWebviewContent } from './getWebviewContent';
 
+export type ActiveBoardListener = (platform: PlatformId, boardId: BoardId) => void;
+
 export class HotSearchViewProvider implements vscode.WebviewViewProvider {
   private view?: vscode.WebviewView;
-  private activePlatform: PlatformId = 'baidu';
-  private activeBoard: BoardId = 'realtime';
+  private activePlatform: PlatformId = 'aihot';
+  private activeBoard: BoardId = 'selected';
 
-  constructor(private service: TrendService) {}
+  constructor(
+    private service: TrendService,
+    private onActiveBoardChanged?: ActiveBoardListener,
+  ) {}
 
   resolveWebviewView(webviewView: vscode.WebviewView): void {
     this.view = webviewView;
     webviewView.webview.options = { enableScripts: true };
     webviewView.webview.html = getWebviewContent(webviewView.webview);
 
-    webviewView.onDidChangeVisibility((visible) => {
-      if (visible) void this.fetchCurrent();
+    webviewView.onDidChangeVisibility(() => {
+      if (webviewView.visible) void this.fetchCurrent();
     });
 
     webviewView.webview.onDidReceiveMessage(async (msg) => {
@@ -26,20 +31,24 @@ export class HotSearchViewProvider implements vscode.WebviewViewProvider {
           this.sendBoard(this.service.getCached(this.activePlatform, this.activeBoard));
           if (webviewView.visible) await this.fetchCurrent();
           break;
-        case 'switchPlatform':
+        case 'switchPlatform': {
           this.activePlatform = msg.platform;
-          if (!this.service.supportsBoard(this.activePlatform, this.activeBoard)) {
-            this.activeBoard = 'realtime';
+          const boards = this.service.getBoards(this.activePlatform);
+          if (!boards.includes(this.activeBoard)) {
+            this.activeBoard = boards[0];
           }
+          this.notifyActiveChanged();
           this.postConfig();
           await this.fetchCurrent();
           break;
+        }
         case 'switchTab':
           this.activeBoard = msg.boardId;
+          this.notifyActiveChanged();
           await this.fetchCurrent();
           break;
         case 'refresh':
-          await this.fetchBoard(msg.platform, msg.boardId);
+          await this.fetchBoard(msg.platform, msg.boardId, { force: true });
           break;
         case 'open':
           await this.openUrl(msg.url);
@@ -52,14 +61,28 @@ export class HotSearchViewProvider implements vscode.WebviewViewProvider {
     await this.fetchCurrent();
   }
 
+  private notifyActiveChanged(): void {
+    this.onActiveBoardChanged?.(this.activePlatform, this.activeBoard);
+  }
+
   private async fetchCurrent(): Promise<void> {
     await this.fetchBoard(this.activePlatform, this.activeBoard);
   }
 
-  private async fetchBoard(platform: PlatformId, boardId: BoardId): Promise<void> {
+  private async fetchBoard(
+    platform: PlatformId,
+    boardId: BoardId,
+    opts?: { force?: boolean },
+  ): Promise<void> {
     if (!this.view) return;
-    this.view.webview.postMessage({ type: 'loading', platform, boardId });
-    await this.service.refresh(platform, boardId);
+    // 有缓存就先展示缓存，避免"加载中"清屏闪烁；没有才显示加载状态
+    const cached = this.service.getCached(platform, boardId);
+    if (cached) {
+      this.sendBoard(cached);
+    } else {
+      this.view.webview.postMessage({ type: 'loading', platform, boardId });
+    }
+    await this.service.refresh(platform, boardId, opts);
   }
 
   private postConfig(): void {
@@ -67,7 +90,9 @@ export class HotSearchViewProvider implements vscode.WebviewViewProvider {
       type: 'config',
       platform: this.activePlatform,
       boardId: this.activeBoard,
-      supportsFinance: this.service.supportsBoard(this.activePlatform, 'finance'),
+      boards: this.service
+        .getBoards(this.activePlatform)
+        .map((id) => ({ id, name: BOARD_NAMES[id] })),
     });
   }
 

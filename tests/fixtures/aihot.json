@@ -1,0 +1,43 @@
+{
+  "count": 3,
+  "hasNext": true,
+  "nextCursor": "opaque-token",
+  "items": [
+    {
+      "id": "cm9abc456def789ghi012jkl3",
+      "title": "OpenAI 发布新一代模型",
+      "title_en": "OpenAI releases next-gen model",
+      "url": "https://example.com/openai",
+      "source": "OpenAI Blog",
+      "publishedAt": "2026-05-07T15:30:00.000Z",
+      "summary": "新模型在推理能力上大幅提升。",
+      "category": "ai-models",
+      "score": 92,
+      "selected": true
+    },
+    {
+      "id": "cm9def789ghi012jkl345mno6",
+      "title": "某 AI 产品更新",
+      "title_en": null,
+      "url": "https://example.com/product",
+      "source": "X：Berry Xia (@berry_xia)",
+      "publishedAt": "2026-05-07T10:00:00.000Z",
+      "summary": "产品小版本迭代。",
+      "category": "ai-products",
+      "score": 70,
+      "selected": true
+    },
+    {
+      "id": "cm9ghi012jkl345mno678pqr9",
+      "title": "无摘要条目",
+      "title_en": null,
+      "url": "https://example.com/bare",
+      "source": "Hacker News",
+      "publishedAt": null,
+      "summary": null,
+      "category": null,
+      "score": null,
+      "selected": true
+    }
+  ]
+}

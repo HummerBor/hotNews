@@ -158,14 +158,12 @@ export function getWebviewContent(webview: vscode.Webview): string {
       <button class="refresh-btn" id="refreshBtn">换一换 ↻</button>
     </div>
     <div class="platform-tabs">
-      <button class="platform-tab active" data-platform="baidu">百度</button>
+      <button class="platform-tab active" data-platform="aihot">AI</button>
+      <button class="platform-tab" data-platform="baidu">百度</button>
       <button class="platform-tab" data-platform="weibo">微博</button>
       <button class="platform-tab" data-platform="tencent">腾讯</button>
     </div>
-    <div class="tabs board-tabs" id="boardTabs">
-      <button class="tab active" data-board="realtime">热搜榜</button>
-      <button class="tab" data-board="finance">财经榜</button>
-    </div>
+    <div class="tabs board-tabs hidden" id="boardTabs"></div>
   </div>
   <div class="scroll-area" id="scrollArea">
     <div id="status" class="status">加载中...</div>
@@ -173,9 +171,9 @@ export function getWebviewContent(webview: vscode.Webview): string {
   </div>
   <script nonce="${nonce}">
     const vscode = acquireVsCodeApi();
-    const platformNames = { baidu: '百度', weibo: '微博', tencent: '腾讯' };
-    let activePlatform = 'baidu';
-    let activeBoard = 'realtime';
+    const platformNames = { aihot: 'AI', baidu: '百度', weibo: '微博', tencent: '腾讯' };
+    let activePlatform = 'aihot';
+    let activeBoard = 'selected';
 
     function escapeHtml(text) {
       return text
@@ -186,19 +184,27 @@ export function getWebviewContent(webview: vscode.Webview): string {
     }
 
     function updateTitle() {
-      document.getElementById('title').textContent = platformNames[activePlatform] + '热搜';
+      const name = platformNames[activePlatform];
+      document.getElementById('title').textContent =
+        activePlatform === 'aihot' ? 'AI 热搜' : name + '热搜';
     }
 
-    function setFinanceVisible(show) {
+    function renderBoardTabs(boards) {
       const boardTabs = document.getElementById('boardTabs');
-      if (show) {
-        boardTabs.classList.remove('hidden');
-      } else {
-        boardTabs.classList.add('hidden');
-        activeBoard = 'realtime';
-        document.querySelectorAll('.tab').forEach((t) => {
-          t.classList.toggle('active', t.dataset.board === 'realtime');
+      boardTabs.innerHTML = '';
+      boardTabs.classList.toggle('hidden', boards.length < 2);
+      for (const board of boards) {
+        const btn = document.createElement('button');
+        btn.className = 'tab' + (board.id === activeBoard ? ' active' : '');
+        btn.dataset.board = board.id;
+        btn.textContent = board.name;
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+          btn.classList.add('active');
+          activeBoard = board.id;
+          vscode.postMessage({ type: 'switchTab', boardId: activeBoard });
         });
+        boardTabs.appendChild(btn);
       }
     }
 
@@ -220,6 +226,7 @@ export function getWebviewContent(webview: vscode.Webview): string {
           '<span class="rank ' + rankClass + '">' + (item.isPinned ? '↑' : item.rank) + '</span>' +
           '<span class="title">' + escapeHtml(item.title) + '</span>' +
           badgeHtml;
+        if (item.tooltip) row.title = item.tooltip;
         row.onclick = () => vscode.postMessage({ type: 'open', url: item.url });
         list.appendChild(row);
       }
@@ -247,15 +254,6 @@ export function getWebviewContent(webview: vscode.Webview): string {
       });
     });
 
-    document.querySelectorAll('.tab').forEach((tab) => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
-        tab.classList.add('active');
-        activeBoard = tab.dataset.board;
-        vscode.postMessage({ type: 'switchTab', boardId: activeBoard });
-      });
-    });
-
     document.getElementById('refreshBtn').addEventListener('click', () => {
       vscode.postMessage({ type: 'refresh', platform: activePlatform, boardId: activeBoard });
     });
@@ -278,12 +276,9 @@ export function getWebviewContent(webview: vscode.Webview): string {
           activePlatform = msg.platform;
           activeBoard = msg.boardId;
           updateTitle();
-          setFinanceVisible(msg.supportsFinance);
+          renderBoardTabs(msg.boards);
           document.querySelectorAll('.platform-tab').forEach((t) => {
             t.classList.toggle('active', t.dataset.platform === activePlatform);
-          });
-          document.querySelectorAll('.tab').forEach((t) => {
-            t.classList.toggle('active', t.dataset.board === activeBoard);
           });
           break;
       }
